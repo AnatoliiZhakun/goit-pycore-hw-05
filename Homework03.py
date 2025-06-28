@@ -12,9 +12,6 @@ def parse_log_line(line: str) -> dict:
      } #результат в словник
 
 def load_logs(path_log) -> list: # Зчитування файлу
-    if not path_log.exists():
-        print(f"Файлу '{path_log}' не існує.")
-        return []
     dict_log = []
     with open(path_log, 'r', encoding='utf-8') as fh:
         while True:
@@ -58,20 +55,23 @@ def main():
 
     # print (log_path_str, *args)
     # Конвертуємо введений текст у об'єкт типу Path
-    log_path = Path(log_path_str)
-    all_dict_error=load_logs(log_path) # Зчитування файлу та створення словника
+    if not Path(log_path_str).exists():
+        print(f"Файлу '{log_path_str}' не існує.")
+    else:
+        log_path = Path(log_path_str)
+        all_dict_error=load_logs(log_path) # Зчитування файлу та створення словника
 
-    # print(all_dict_error)
-    #print(count_logs_by_level(all_dict_error))
+        # print(all_dict_error)
+        #print(count_logs_by_level(all_dict_error))
 
-    display_log_counts(count_logs_by_level(all_dict_error)) # Створення таблиці по результату розрахунку
+        display_log_counts(count_logs_by_level(all_dict_error)) # Створення таблиці по результату розрахунку
 
-    if level_str != None: #Вивід списку по додатковому параметру
-        dict_log = filter_logs_by_level (all_dict_error, level_str)
-        print()
-        print(f'Деталі логів для рівня {level_str}:')
-        for log in dict_log[0]:
-            print(f"{log['date']} {log['time']} — {log['info_error']}")
+        if level_str != None: #Вивід списку по додатковому параметру
+            dict_log = filter_logs_by_level (all_dict_error, level_str)
+            print()
+            print(f'Деталі логів для рівня {level_str}:')
+            for log in dict_log[0]:
+                print(f"{log['date']} {log['time']} — {log['info_error']}")
 
 if __name__ == "__main__":
     main()
